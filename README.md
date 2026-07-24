@@ -1,8 +1,8 @@
 # End-to-End Analytics Pipeline: Case Management Reporting System
 
-A production-grade analytics pipeline built from scratch on a live SQL Server case management database, delivering organisation-wide reporting for a UK charity through a fully governed dimensional data model in Power BI.
+A production-grade analytics pipeline built from scratch on a live SQL Server case management database, delivering organisation-wide reporting for a UK third sector organisation through a fully governed dimensional data model in Power BI.
 
-This project documents the complete build from raw transactional data to executive dashboards including SQL architecture, data cleaning, dimensional modelling, DAX measures and data quality frameworks.
+This project documents the complete build from raw transactional data to executive dashboards, including SQL architecture, data cleaning, dimensional modelling, DAX measures and data quality frameworks.
 
 ---
 
