@@ -171,7 +171,7 @@ Inactive relationships are activated via USERELATIONSHIP() in DAX measures where
 
 **dim_Client** - 80,000+ unique clients, 13 cleaned demographic columns, age banding, postcode-derived geography (Ward, Local Authority, Region).
 
-**dim_Enquiry** - 267,000+ unique cases, IAA classification logic, immigration status, case type, outcome tracking, closure time banding.
+**dim_Enquiry** - 250,000+ unique cases, IAA classification logic, immigration status, case type, outcome tracking, closure time banding.
 
 **dim_Staff** - built directly from the Users table via SQL query (not derived from fact data), Text.Proper normalisation applied to resolve case inconsistencies across staff name entry points.
 
