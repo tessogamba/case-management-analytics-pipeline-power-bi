@@ -18,8 +18,8 @@ The organisation had no dedicated analytics capability. Reporting was produced m
 
 | Entity | Count |
 |---|---|
-| Clients | 83,000+ |
-| Enquiries / Cases | 260,000+ |
+| Clients | 80,000+ |
+| Enquiries / Cases | 250,000+ |
 | Actions / Contacts | 1M+ |
 | Raw postcode variants | 19,000+ |
 | Raw nationality variants | 496+ |
@@ -126,7 +126,7 @@ Raw value → Lookup merge (controlled list) → Custom column (unmatched varian
 **Notable cleaning decisions:**
 
 *Action Type - channel vs topic:*
-Before the action type dropdown was introduced, caseworkers recorded the subject of the action (Housing, Benefits, Immigration) rather than the mechanism (Telephone, Email, Advice). The controlled list captures mechanism only. All 270+ subject/topic entries are classified as `Invalid entry`. The stored value `"Face to Face"` maps to the current display label `"Advice"`, the front-end label was renamed without updating the stored database value, affecting 200,000+ historical records.
+Before the action type dropdown was introduced, caseworkers recorded the subject of the action (Housing, Benefits, Immigration) rather than the mechanism (Telephone, Email, Advice). The controlled list captures mechanism only. All 270+ subject/topic entries are classified as `Invalid entry`. The stored value `"Face to Face"` maps to the current display label `"Advice"`; the front-end label was renamed without updating the stored database value, affecting 200,000+ historical records.
 
 *Postcode - three-layer validation:*
 1. Format normalisation - strips brackets, slashes, dashes, applies O→0/I→1/L→1 substitution, validates inward code format
@@ -169,7 +169,7 @@ fact_Actions (grain: one row per action/contact)
 
 Inactive relationships are activated via USERELATIONSHIP() in DAX measures where needed, for example filtering enquiries by their open date, filtering by closed date, or attributing actions to specific staff roles.
 
-**dim_Client** - 83,000+ unique clients, 13 cleaned demographic columns, age banding, postcode-derived geography (Ward, Local Authority, Region).
+**dim_Client** - 80,000+ unique clients, 13 cleaned demographic columns, age banding, postcode-derived geography (Ward, Local Authority, Region).
 
 **dim_Enquiry** - 267,000+ unique cases, IAA classification logic, immigration status, case type, outcome tracking, closure time banding.
 
@@ -203,9 +203,9 @@ Inactive relationships are activated via USERELATIONSHIP() in DAX measures where
 
 ## Data Quality Framework
 
-Every cleaned column outputs one of three DQ signals. This means the cleaning layer and the reporting layer are unified, no separate DQ pipeline required.
+Every cleaned column outputs one of three DQ signals. This means the cleaning layer and the reporting layer are unified; no separate DQ pipeline required.
 
-An unpivoted DQ table approach was evaluated but rejected due to volume: unpivoting 13 columns across 83,000+ client records produces 1M+ rows which exceeds practical import mode limits. Instead, DQ is measured directly from cleaned dimension tables using multi-condition OR filters, producing efficient headline metrics. Per-field breakdown is available via visual-level filters on the Data Quality dashboard page.
+An unpivoted DQ table approach was evaluated but rejected due to volume: unpivoting 13 columns across 80,000+ client records produces 1M+ rows, which exceeds practical import mode limits. Instead, DQ is measured directly from cleaned dimension tables using multi-condition OR filters, producing efficient headline metrics. Per-field breakdown is available via visual-level filters on the Data Quality dashboard page.
 
 ---
 
