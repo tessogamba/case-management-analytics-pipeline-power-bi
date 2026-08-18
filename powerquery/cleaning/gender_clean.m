@@ -6,10 +6,9 @@
 //   part 2: fx_gender_clean custom function
 //
 // purpose:
-//   maps 200+ raw gender entries (years of free-text
-//   entry before controlled lists were introduced) to a
-//   set of 7 controlled output values matching the
-//   organisation's current gender dropdown list.
+//   maps 300+ raw gender entries in this anonymised public
+//   portfolio version to a controlled output list matching the
+//   organisation's current gender dropdown.
 //
 // controlled output values:
 //   Female (including trans woman)
@@ -104,12 +103,11 @@ let
     looksAddressOrNumeric =
         isNumber or
         Text.Contains(v0, "flat")       or Text.Contains(v0, "room")     or
-        Text.Contains(v0, "road")       or Text.Contains(v0, "waterloo") or
-        Text.Contains(v0, "street")     or Text.Contains(v0, " st ")     or
-        Text.EndsWith(v0, " st")        or Text.StartsWith(v0, "st ")    or
-        Text.Contains(v0, " avenue")    or Text.Contains(v0, " ave")     or
-        Text.Contains(v0, "hotel")      or Text.Contains(v0, "homeless") or
-        Text.Contains(v0, "@"),
+        Text.Contains(v0, "road")       or Text.Contains(v0, "street")   or
+        Text.Contains(v0, " st ")       or Text.EndsWith(v0, " st")      or
+        Text.StartsWith(v0, "st ")      or Text.Contains(v0, " avenue")  or
+        Text.Contains(v0, " ave")       or Text.Contains(v0, "hotel")    or
+        Text.Contains(v0, "homeless")   or Text.Contains(v0, "@"),
 
     // demographic/title values that do not represent gender
     isDefinitelyNoise =
@@ -121,18 +119,10 @@ let
         v0 = "w" or v0 = "o" or v0 = "r" or
         v0 = "a" or v0 = "b" or v0 = "g" or v0 = "t" or v0 = "n",
 
-    // personal names entered in the gender field
-    // (a subset of the full name list observed in the data)
+    // personal names were observed in the source field.
+    // literal names are intentionally removed from this public portfolio.
     isKnownNameNoise =
-        v0 = "f4"             or v0 = "muhammad"        or v0 = "radlinski"       or
-        v0 = "patricia"       or v0 = "conrod"          or v0 = "bahram"          or
-        v0 = "liyana"         or v0 = "audrey"          or v0 = "ezzuldin"        or
-        v0 = "zahra"          or v0 = "malik"           or v0 = "omer gul"        or
-        v0 = "najib"          or v0 = "michael"         or v0 = "amir"            or
-        v0 = "mebrahmton"     or v0 = "adem"            or v0 = "marin"           or
-        v0 = "mario"          or v0 = "vladyslaz"       or v0 = "allaalrahman"    or
-        v0 = "shamsan"        or v0 = "fumilola roberta" or v0 = "mehdi"          or
-        v0 = "ana"            or v0 = "massoud"         or v0 = "bernice",
+        Text.StartsWith(v0, "[name_variant_") and Text.EndsWith(v0, "]"),
 
     // strip punctuation for normalisation matching
     vPunctStripped = Text.Trim(Text.Remove(v0, {".", ",", ";", ":", "'", "`", "-", "_", "(", ")", "/", "\"})),
@@ -158,8 +148,8 @@ let
 
     // --------------------------------------------------------
     // normalise female and male spelling variants
-    // 40+ female typos, 20+ male typos observed in the data
-    // (result of 5 years of free-text entry before dropdowns)
+    // dozens of spelling variants observed in the source data.
+    // counts are intentionally abstracted in this public version.
     // --------------------------------------------------------
 
     vNorm0 =
