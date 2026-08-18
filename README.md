@@ -18,10 +18,10 @@ The organisation had no dedicated analytics capability. Reporting was produced m
 
 | Entity | Count |
 |---|---|
-| Clients | 80,000+ |
-| Enquiries / Cases | 250,000+ |
-| Actions / Contacts | 1M+ |
-| Raw postcode variants | 19,000+ |
+| Clients | 100,000+ |
+| Enquiries / Cases | 300,000+ |
+| Actions / Contacts | 2M+ |
+| Raw postcode variants | 20,000+ |
 | Raw nationality variants | 496+ |
 | Cleaned columns | 13+ |
 | DAX measures | 60+ |
@@ -121,7 +121,7 @@ Raw value → Lookup merge (controlled list) → Custom column (unmatched varian
 | Enquiry Immigration Status | 16 | Case-level status snapshot |
 | Referral Agency | 443+ | Named organisations |
 | Signpost Agency | 400+ | Named organisations |
-| Postcode | 19,000+ | Three-layer validation, see note below |
+| Postcode | 20,000+ | Three-layer validation, see note below |
 
 **Notable cleaning decisions:**
 
@@ -169,9 +169,9 @@ fact_Actions (grain: one row per action/contact)
 
 Inactive relationships are activated via USERELATIONSHIP() in DAX measures where needed, for example filtering enquiries by their open date, filtering by closed date, or attributing actions to specific staff roles.
 
-**dim_Client** - 80,000+ unique clients, 13 cleaned demographic columns, age banding, postcode-derived geography (Ward, Local Authority, Region).
+**dim_Client** - 100,000+ unique clients, 13 cleaned demographic columns, age banding, postcode-derived geography (Ward, Local Authority, Region).
 
-**dim_Enquiry** - 250,000+ unique cases, IAA classification logic, immigration status, case type, outcome tracking, closure time banding.
+**dim_Enquiry** - 300,000+ unique cases, IAA classification logic, immigration status, case type, outcome tracking, closure time banding.
 
 **dim_Staff** - built directly from the Users table via SQL query (not derived from fact data), Text.Proper normalisation applied to resolve case inconsistencies across staff name entry points.
 
@@ -260,7 +260,7 @@ An unpivoted DQ table approach was evaluated but rejected due to volume: unpivot
 
 **dim_Staff from Users table** - initial approach derived staff names from an unpivot of all staff columns across fact and dimension tables. Replaced with a direct query to the Users table, which is cleaner, more stable, and avoids fan-out from the unpivot causing many-to-many relationship issues.
 
-**SharePoint postcode cache** - postcodes.io API calls on 19,000+ distinct raw values would be prohibitively slow on every refresh. A SharePoint-hosted Excel cache stores previously validated postcodes; the API only runs on cache misses, reducing API calls to a small fraction of the total on each refresh.
+**SharePoint postcode cache** - postcodes.io API calls on 20,000+ distinct raw values would be prohibitively slow on every refresh. A SharePoint-hosted Excel cache stores previously validated postcodes; the API only runs on cache misses, reducing API calls to a small fraction of the total on each refresh.
 
 ## Related Projects
 
