@@ -16,13 +16,15 @@ The organisation had no dedicated analytics capability. Reporting was produced m
 
 ## Scale
 
-| Entity | Count |
+> **Anonymisation note:** Operational scale and data-quality volume figures in this public portfolio have been deliberately approximated and modified. They demonstrate the scale and complexity of the engineering problem without reproducing the organisation's internal reporting figures.
+
+| Entity | Approximate public portfolio scale |
 |---|---|
-| Clients | 100,000+ |
-| Enquiries / Cases | 300,000+ |
-| Actions / Contacts | 2M+ |
-| Raw postcode variants | 20,000+ |
-| Raw nationality variants | 496+ |
+| Clients | 120,000+ |
+| Enquiries / Cases | 450,000+ |
+| Actions / Contacts | 3M+ |
+| Raw postcode variants | 30,000+ |
+| Raw nationality variants | 700+ |
 | Cleaned columns | 13+ |
 | DAX measures | 60+ |
 
@@ -59,7 +61,7 @@ DAX Measures + Power BI Dashboards
 
 ## SQL Architecture
 
-The core of the pipeline is a single CTE-based SQL query connecting 9 tables via a chain of natural key joins, pulling over 1 million rows of transactional casework data into a clean, analysis-ready flat structure.
+The core of the pipeline is a single CTE-based SQL query connecting 9 tables via a chain of natural key joins, pulling several million rows of transactional casework data into a clean, analysis-ready flat structure.
 
 **Key technical challenges solved:**
 
@@ -107,26 +109,26 @@ Raw value → Lookup merge (controlled list) → Custom column (unmatched varian
 
 **Cleaning coverage:**
 
-| Column | Variants mapped | Notes |
+| Column | Approximate public portfolio scale | Notes |
 |---|---|---|
-| Gender | 200+ | Direction-aware trans handling; 40+ female spelling variants |
-| Nationality | 496+ | Country names, demonyms, typos, ISO codes, dual entries |
-| Ethnic Origin | 205+ | 19 controlled values |
-| Spoken Language | 764 controlled values | Dialect and direction-aware handling |
-| Employment Status | 50+ | Unemployment has 12+ spelling variants |
-| Housing Status | 424+ | 8 controlled values |
-| Housing Provider | 88+ | Named organisations |
-| Action Type | 312+ | Channel vs topic distinction, see note below |
-| Client Immigration Status | 205+ | 14 controlled values; visa types, abbreviations, legacy codes |
-| Enquiry Immigration Status | 16 | Case-level status snapshot |
-| Referral Agency | 443+ | Named organisations |
-| Signpost Agency | 400+ | Named organisations |
-| Postcode | 20,000+ | Three-layer validation, see note below |
+| Gender | 300+ variants | Direction-aware trans handling; dozens of spelling variants |
+| Nationality | 700+ variants | Country names, demonyms, typos, ISO codes, dual entries |
+| Ethnic Origin | 300+ variants | Mapped to controlled values |
+| Spoken Language | 1,000+ variants | Dialect and direction-aware handling |
+| Employment Status | 75+ variants | Numerous unemployment spelling variants |
+| Housing Status | 600+ variants | Mapped to controlled values |
+| Housing Provider | 150+ variants | Named organisations |
+| Action Type | 450+ variants | Channel vs topic distinction, see note below |
+| Client Immigration Status | 300+ variants | Visa types, abbreviations, legacy codes |
+| Enquiry Immigration Status | 25+ variants | Case-level status snapshot |
+| Referral Agency | 650+ variants | Named organisations |
+| Signpost Agency | 600+ variants | Named organisations |
+| Postcode | 30,000+ variants | Three-layer validation, see note below |
 
 **Notable cleaning decisions:**
 
 *Action Type - channel vs topic:*
-Before the action type dropdown was introduced, caseworkers recorded the subject of the action (Housing, Benefits, Immigration) rather than the mechanism (Telephone, Email, Advice). The controlled list captures mechanism only. All 270+ subject/topic entries are classified as `Invalid entry`. The stored value `"Face to Face"` maps to the current display label `"Advice"`; the front-end label was renamed without updating the stored database value, affecting 200,000+ historical records.
+Before the action type dropdown was introduced, caseworkers recorded the subject of the action (Housing, Benefits, Immigration) rather than the mechanism (Telephone, Email, Advice). The controlled list captures mechanism only. Hundreds of subject/topic entries are classified as `Invalid entry`. The stored value `"Face to Face"` maps to the current display label `"Advice"`; the front-end label was renamed without updating the stored database value, affecting a substantial volume of historical records.
 
 *Postcode - three-layer validation:*
 1. Format normalisation - strips brackets, slashes, dashes, applies O→0/I→1/L→1 substitution, validates inward code format
@@ -169,9 +171,9 @@ fact_Actions (grain: one row per action/contact)
 
 Inactive relationships are activated via USERELATIONSHIP() in DAX measures where needed, for example filtering enquiries by their open date, filtering by closed date, or attributing actions to specific staff roles.
 
-**dim_Client** - 100,000+ unique clients, 13 cleaned demographic columns, age banding, postcode-derived geography (Ward, Local Authority, Region).
+**dim_Client** - 120,000+ public portfolio-scale clients, 13 cleaned demographic columns, age banding, postcode-derived geography (Ward, Local Authority, Region).
 
-**dim_Enquiry** - 300,000+ unique cases, IAA classification logic, immigration status, case type, outcome tracking, closure time banding.
+**dim_Enquiry** - 450,000+ public portfolio-scale cases, IAA classification logic, immigration status, case type, outcome tracking, closure time banding.
 
 **dim_Staff** - built directly from the Users table via SQL query (not derived from fact data), Text.Proper normalisation applied to resolve case inconsistencies across staff name entry points.
 
@@ -205,7 +207,7 @@ Inactive relationships are activated via USERELATIONSHIP() in DAX measures where
 
 Every cleaned column outputs one of three DQ signals. This means the cleaning layer and the reporting layer are unified; no separate DQ pipeline required.
 
-An unpivoted DQ table approach was evaluated but rejected due to volume: unpivoting 13 columns across 80,000+ client records produces 1M+ rows, which exceeds practical import mode limits. Instead, DQ is measured directly from cleaned dimension tables using multi-condition OR filters, producing efficient headline metrics. Per-field breakdown is available via visual-level filters on the Data Quality dashboard page.
+An unpivoted DQ table approach was evaluated but rejected due to volume: unpivoting 13 columns across a six-figure client dimension would produce well over 1M rows. Instead, DQ is measured directly from cleaned dimension tables using multi-condition OR filters, producing efficient headline metrics. Per-field breakdown is available via visual-level filters on the Data Quality dashboard page.
 
 ---
 
@@ -228,8 +230,8 @@ An unpivoted DQ table approach was evaluated but rejected due to volume: unpivot
 ├── powerquery/
 │   ├── staging.m                   # Staging layer — trim, clean, type, staff normalisation
 │   └── cleaning/
-│       ├── gender_clean.m          # 200+ variants, direction-aware trans handling
-│       ├── nationality_clean.m     # 496+ variants, controlled list merge
+│       ├── gender_clean.m          # high-volume variants, direction-aware trans handling
+│       ├── nationality_clean.m     # high-volume variants, controlled list merge
 │       ├── postcode_clean.m        # Three-layer: format, cache, postcodes.io API
 │       ├── employment_status_clean.m
 │       └── action_type_clean.m     # Channel vs topic distinction
@@ -256,11 +258,11 @@ An unpivoted DQ table approach was evaluated but rejected due to volume: unpivot
 
 **Cleaning in Power Query, not SQL** - DQ classification (Missing entry / Invalid entry) requires business logic that belongs in the transformation layer, not the source database. Keeping it in Power Query also makes it visible, auditable and editable without database access.
 
-**Single staging query with load enabled** - prevents the 11-minute SQL query from executing multiple times across downstream dimension queries. All dims read from the cached staging result; disabling load caused each dim to trigger a fresh SQL execution.
+**Single staging query with load enabled** - prevents the long-running SQL query from executing multiple times across downstream dimension queries. All dims read from the cached staging result; disabling load caused each dim to trigger a fresh SQL execution.
 
 **dim_Staff from Users table** - initial approach derived staff names from an unpivot of all staff columns across fact and dimension tables. Replaced with a direct query to the Users table, which is cleaner, more stable, and avoids fan-out from the unpivot causing many-to-many relationship issues.
 
-**SharePoint postcode cache** - postcodes.io API calls on 20,000+ distinct raw values would be prohibitively slow on every refresh. A SharePoint-hosted Excel cache stores previously validated postcodes; the API only runs on cache misses, reducing API calls to a small fraction of the total on each refresh.
+**SharePoint postcode cache** - API calls across tens of thousands of distinct raw values would be prohibitively slow on every refresh. A SharePoint-hosted Excel cache stores previously validated postcodes; the API only runs on cache misses, reducing external calls to a small fraction of the total on each refresh.
 
 ## Related Projects
 
