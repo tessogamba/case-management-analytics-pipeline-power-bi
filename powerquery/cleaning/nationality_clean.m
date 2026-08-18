@@ -2,15 +2,15 @@
 // nationality_clean.m
 // ============================================================
 // purpose:
-//   maps 496+ raw nationality entries to a controlled list
-//   of 228 standardised nationality values matching the
-//   organisation's current nationality dropdown.
+//   maps 700+ raw nationality entries in this anonymised public
+//   portfolio version to a controlled list of standardised
+//   nationality values matching the organisation's dropdown.
 //
 // approach:
 //   unlike gender (which uses a reusable function), nationality
 //   cleaning is implemented as a custom column directly on the
 //   distinct reference query. this is because:
-//     - the mapping is a large static lookup (496 entries)
+//     - the mapping is a large static lookup
 //     - the lookup table (Nationality) from the crm is merged
 //       first — any exact match to the controlled list wins
 //     - the custom column only handles the unmatched remainder
@@ -18,18 +18,17 @@
 //        abbreviations, iso codes, dual nationality entries)
 //
 // controlled output:
-//   228 standardised nationality values from the crm dropdown
+//   standardised nationality values from the crm dropdown
 //   Missing entry  ← null or blank at source
 //   Invalid entry  ← placeholder codes (ILR, XXA, XXB, etc.)
 //   null           ← new variant not yet mapped (surfaces for review)
 //
 // data context:
-//   nationality was a free-text field for several years before
-//   a controlled dropdown was introduced. the 496 variants
-//   reflect this history — the same nationality appears as the
-//   country name ("Afghanistan"), the demonym ("Afghan"),
-//   abbreviations ("AFG"), iso codes ("AFG"), dual entries
-//   ("Afghan/British"), typos ("Afghani") and combinations.
+//   nationality was historically entered as free text before
+//   a controlled dropdown was introduced. the public portfolio
+//   scale has been deliberately modified for anonymisation.
+//   variants include country names, demonyms, abbreviations,
+//   iso codes, dual entries, typos and combinations.
 //
 //   some judgment calls in the mapping:
 //     - "Kurdish" → Iraqi (most common nationality for Kurdish
@@ -333,17 +332,17 @@ let
             if v = "sdn" then "Sudanese" else
 
             // geographic locations used instead of nationality
-            if v = "nairobi" then "Kenyan" else       // city → country
+            if v = "nairobi" then "Kenyan" else
 
             // contested/stateless cases
             if v = "tibet" then "Stateless" else
             if v = "tibet (china)" then "Stateless" else
-            if v = "kwt-bedoon" then "Stateless" else  // bedoon = stateless kuwait residents
+            if v = "kwt-bedoon" then "Stateless" else
 
             // ethnic/language groups mapped to closest nationality
-            if v = "kurdish" then "Iraqi" else          // no Kurdish nationality option exists
+            if v = "kurdish" then "Iraqi" else
             if v = "kurdish/iraqi" then "Iraqi" else
-            if v = "tigrinya" then "Eritrean" else      // tigrinya = eritrean/ethiopian language group
+            if v = "tigrinya" then "Eritrean" else
 
             // dual nationality entries — first-listed nationality used
             if v = "dual (usa & pakistani)" then "American" else
@@ -353,14 +352,13 @@ let
             if v = "palastinain-polish" then "Palestinian" else
 
             // congo disambiguation
-            // bare "Congo" → DRC (more common in this caseload context)
             if v = "congo" then "Congolese (DRC)" else
             if v = "congo drc" then "Congolese (DRC)" else
             if v = "orc congo" then "Congolese (DRC)" else
             if v = "zaire" then "Congolese (DRC)" else
             if v = "zaïrean" then "Congolese (DRC)" else
 
-            // cote d'ivoire variants (apostrophe handling)
+            // cote d'ivoire variants
             if v = "cote d'ivoire" then "Ivorian" else
             if v = "côte d'ivoire" then "Ivorian" else
             if v = "ivory coast" then "Ivorian" else
@@ -369,14 +367,13 @@ let
             if v = "ivorienne" then "Ivorian" else
 
             // explicit invalid placeholders — administrative codes
-            // entered in the nationality field in error
-            if v = "ilr"     then "Invalid entry" else   // indefinite leave to remain (not a nationality)
-            if v = "xxa"     then "Invalid entry" else   // placeholder/system code
-            if v = "xxb"     then "Invalid entry" else   // placeholder/system code
-            if v = "er"      then "Invalid entry" else   // fragment
-            if v = "ian"     then "Invalid entry" else   // fragment
-            if v = "unknown" then "Invalid entry" else   // explicit unknown
-            if v = "."       then "Invalid entry" else   // punctuation placeholder
+            if v = "ilr"     then "Invalid entry" else
+            if v = "xxa"     then "Invalid entry" else
+            if v = "xxb"     then "Invalid entry" else
+            if v = "er"      then "Invalid entry" else
+            if v = "ian"     then "Invalid entry" else
+            if v = "unknown" then "Invalid entry" else
+            if v = "."       then "Invalid entry" else
 
             // new variant not yet mapped — surfaces as null for review
             null
