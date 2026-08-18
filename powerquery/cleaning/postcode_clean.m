@@ -29,10 +29,9 @@
 //     postcodes are resolved instantly from the cache without
 //     an api call. the cache is updated periodically with
 //     newly validated postcodes to keep api calls minimal.
-//     this approach is critical for performance, the postcode
-//     column has been free-text since the system launched
-//     (still free-text at time of writing) resulting in 19,000+
-//     distinct raw values.
+//     this approach is critical for performance, with 30,000+
+//     distinct raw postcode variants represented in this
+//     anonymised public portfolio version.
 //
 //   layer 3 — postcodes.io api
 //     only runs on postcodes not found in the cache.
