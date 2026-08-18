@@ -84,9 +84,9 @@ The core of the pipeline is a single CTE-based SQL query connecting 9 tables via
 The staging layer applies structured cleaning across 13+ demographic and operational columns, handling years of historical free-text entry before dropdown controls were introduced.
 
 **Data context:**
-- Pre-2019 records were migrated from a legacy system
-- 2019 to mid-2024: new system running with free-text entry on most fields
-- Mid-2024 onwards: controlled dropdowns introduced progressively
+- Previous records migrated from a legacy system
+- Mid period: new system running with free-text entry on most fields
+- Recent: controlled dropdowns introduced progressively
 
 As a result, Invalid entry and Missing entry flags reflect historical free-text patterns and genuine data quality gaps — not solely caseworker error.
 
