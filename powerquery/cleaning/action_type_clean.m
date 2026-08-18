@@ -2,9 +2,9 @@
 // action_type_clean.m
 // ============================================================
 // purpose:
-//   maps 300+ raw action type entries to a controlled list
-//   of 21 standardised values matching the organisation's
-//   current action type dropdown.
+//   maps 450+ raw action type entries in this anonymised public
+//   portfolio version to a controlled list matching the
+//   organisation's current action type dropdown.
 //
 // controlled output values (action channel/mechanism):
 //   0800
@@ -41,7 +41,7 @@
 //   than the MECHANISM (e.g. "Telephone", "Email", "Advice").
 //
 //   the controlled list exclusively captures mechanism/channel.
-//   all 270+ subject/topic entries (Housing, Benefits, Debt,
+//   hundreds of subject/topic entries (Housing, Benefits, Debt,
 //   Immigration, NASS, S4, Family Reunion, Food Bank etc. and
 //   their typos) are therefore classified as Invalid entry —
 //   they are not wrong per se, they just answered a different
@@ -53,8 +53,8 @@
 //   "Advice" in the front-end crm display without changing
 //   the underlying stored value. this mapping corrects the
 //   discrepancy so reporting shows the current display label.
-//   "Face to Face" is the single most common action type in
-//   the database with 200,000+ records.
+//   the old stored value appears across a substantial volume
+//   of historical records.
 //
 // author: tess ogamba · github.com/tessogamba
 // ============================================================
@@ -110,8 +110,8 @@ let
 
                 // stored "Face to Face" → display "Advice"
                 // the front-end label was changed without updating
-                // the stored value. 200,000+ historical records
-                // carry the old stored value.
+                // the stored value across a substantial volume of
+                // historical records.
                 else if clean = "face to face"                          then "Advice"
 
                 else if clean = "0800 enquiry"                          then "0800"
@@ -203,7 +203,7 @@ let
                     "i6", "i9", "i,", "oo", "pdf",
                     "i`````````````````````````````````````````````````",
                     "nino", "msc", "mic", "tdr112", "shadann", "fr",
-                    "misd", "imo", "rmc", "council", "eu"
+                    "misd", "imo", "[organisation_code]", "council", "eu"
                 }, clean) then "Invalid entry"
 
                 // genuinely new unknown variant — surfaces as null for review
