@@ -22,7 +22,7 @@
 //   the employment status field was free-text for several years
 //   before a dropdown was introduced, resulting in a wide range
 //   of variants including:
-//     - unemployment typos (12+ spelling variants)
+//     - numerous unemployment spelling variants
 //     - wrong-field entries (website urls, names, council names)
 //     - ambiguous fragments ("no", "f", "u", "2", "3")
 //     - partial entries ("no se", "not e", "not ee")
@@ -87,7 +87,7 @@ let
                 else if v = "no permission to work" then "Not Allowed To Work"
                 else if v = "not seeking work"       then "Unavailable For Work"
 
-                // unemployment variants — 12+ spelling errors observed
+                // unemployment spelling variants observed in the source data
                 // result of free-text entry before dropdown was introduced
                 else if List.Contains({
                     "unemployed", "uemployed", "unemplyed", "unemployment", "unemployer",
