@@ -1,16 +1,16 @@
-# End-to-End Analytics Pipeline: Case Management Reporting System
+# Case Management BI & Reporting Pipeline
 
-A production-grade analytics pipeline built from scratch on a live SQL Server case management database, delivering organisation-wide reporting for a UK third sector organisation through a fully governed dimensional data model in Power BI.
+A production SQL Server-to-Power BI analytics pipeline supporting organisation-wide case-management reporting for a UK third-sector organisation. The solution combines SQL extraction, Power Query transformation, dimensional modelling, DAX and governed data-quality controls across 3M+ operational records.
 
-This project documents the complete build from raw transactional data, including SQL architecture, data cleaning, dimensional modelling, DAX measures and data quality frameworks.
+This project documents the technical design and implementation, from transactional SQL data through transformation and modelling to Power BI reporting.
 
 ---
 
 ## The Problem
 
-The organisation had no dedicated analytics capability. Reporting was produced manually from raw CRM exports using Excel, taking days to prepare and producing inconsistent results across teams. There was no single source of truth, no defined KPIs, and no ability to slice or drill into operational data in real time.
+Operational reporting relied heavily on manual Excel workflows and CRM exports, creating long preparation times and inconsistent results across teams. KPI definitions were not consistently applied, while the existing reporting process provided limited ability to explore performance by service, location, demographic group or reporting period.
 
-**My role:** sole analytics hire, responsible for designing and delivering the entire analytics function from zero.
+**My role:** As Data Analyst within the organisation's data team, I led the technical design and development of the SQL-to-Power BI solution, working with data colleagues, operational teams and senior stakeholders to translate reporting requirements into reliable models, measures and dashboards.
 
 ---
 
@@ -213,12 +213,12 @@ An unpivoted DQ table approach was evaluated but rejected due to volume: unpivot
 
 ## Impact
 
-- Replaced a multi-day manual reporting process with automated, refresh-on-demand dashboards
-- Reduced data latency from weeks to hours
-- Established the organisation's first single source of truth for operational and strategic reporting
-- Delivered the first KPI framework grounded in verified, direct SQL data sources
-- Enabled leadership to monitor performance across multiple offices from a single reporting solution
-- Supported a successful business case for Microsoft Fabric and Power BI Premium licensing
+- Reduced annual reporting turnaround by 50%+, moving core preparation from a multi-week manual process to a matter of days and enabling refreshed outputs within hours
+- Created a consistent reporting layer connecting operational SQL data, agreed KPI definitions and Power BI dashboards
+- Improved access to operational and performance information across multiple offices and service areas
+- Enabled senior leaders and data colleagues to explore performance through governed, refreshable reporting
+- Embedded data-quality monitoring within the reporting model, making missing, invalid and newly occurring values visible for review
+- Helped demonstrate the organisational value of Power BI and inform its wider adoption for reporting
 
 ---
 
@@ -266,10 +266,10 @@ An unpivoted DQ table approach was evaluated but rejected due to volume: unpivot
 
 ## Related Projects
 
-- [retail-analytics-dbt](https://github.com/tessogamba/retail-analytics-dbt) - Analytics engineering pipeline created with dbt and Snowflake: staging layers, marts, and data quality testing
-- [retail-analytics-tableau](https://github.com/tessogamba/retail-analytics-tableau) - Tableau dashboard created on top of the dbt pipeline
-- [financial-analytics-bigquery](https://github.com/tessogamba/financial-analytics-bigquery) - Financial analytics engineering project created with BigQuery and raw SQL
-- [financial-analytics-looker](https://github.com/tessogamba/financial-analytics-looker) - Data Studio (formerly Looker Studio) dashboard created on top of the BigQuery pipeline
+- [retail-analytics-dbt](https://github.com/tessogamba/retail-analytics-dbt) - Retail analytics project using dbt and Snowflake to create tested staging models and dimensional marts
+- [retail-analytics-tableau](https://github.com/tessogamba/retail-analytics-tableau) - Tableau dashboard for customer, sales and revenue analysis using the transformed retail datasets
+- [financial-analytics-bigquery](https://github.com/tessogamba/financial-analytics-bigquery) - Financial analytics project using BigQuery and reusable SQL models across 12 public companies and 23 metrics
+- [financial-analytics-looker](https://github.com/tessogamba/financial-analytics-looker) - Looker Studio dashboard for exploring financial growth, profitability and performance
 
 ---
 *Built by Tess Ogamba · [github.com/tessogamba](https://github.com/tessogamba) · [LinkedIn](https://linkedin.com/in/tessogamba)*
